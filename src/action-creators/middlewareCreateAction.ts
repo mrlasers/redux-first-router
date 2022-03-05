@@ -5,16 +5,18 @@ import type {
   Action,
   ReceivedAction,
   History,
-  QuerySerializer
-} from '../flow-types'
+  QuerySerializer,
+} from "../flow-types";
+import { AnyAction } from 'redux'
+
+import { NOT_FOUND } from '../index'
 import actionToPath from '../pure-utils/actionToPath'
 import nestAction from '../pure-utils/nestAction'
-import { NOT_FOUND } from '../index'
 
-const __DEV__ = process.env.NODE_ENV !== 'production'
+const __DEV__ = process.env.NODE_ENV !== "production";
 
 export default (
-  action: Object,
+  action: AnyAction,
   routesMap: RoutesMap,
   prevLocation: Location,
   history: History,
@@ -22,25 +24,27 @@ export default (
   serializer?: QuerySerializer
 ): Action => {
   try {
-    const pathname = actionToPath(action, routesMap, serializer)
-    const kind = getKind(!!history.entries, pathname, history, action)
-    return nestAction(pathname, action, prevLocation, history, kind)
-  }
-  catch (e) {
+    const pathname = actionToPath(action, routesMap, serializer);
+    const kind = getKind(!!history.entries, pathname, history, action);
+    return nestAction(pathname, action, prevLocation, history, kind);
+  } catch (e) {
     if (__DEV__) {
-      console.error('[redux-first-router] Internal exception when parsing action, fallback to NOT_FOUND. Original exception: ', e)
+      console.error(
+        "[redux-first-router] Internal exception when parsing action, fallback to NOT_FOUND. Original exception: ",
+        e
+      );
     }
 
-    const payload = { ...action.payload }
+    const payload = { ...action.payload };
 
     return nestAction(
-      notFoundPath || prevLocation.pathname || '/',
+      notFoundPath || prevLocation.pathname || "/",
       { ...action, type: NOT_FOUND, payload },
       prevLocation,
       history
-    )
+    );
   }
-}
+};
 
 // REACT NATIVE FEATURE:
 // emulate npm `history` package and `historyCreateAction`  so that actions
@@ -54,34 +58,32 @@ const getKind = (
   pathname: string,
   history: History,
   action: ReceivedAction
-): ?string => {
-  const kind = action.meta && action.meta.location && action.meta.location.kind
+): string => {
+  const kind = action.meta && action.meta.location && action.meta.location.kind;
 
   if (kind) {
-    return kind
-  }
-  else if (!isMemoryHistory) {
-    return 'push'
+    return kind;
+  } else if (!isMemoryHistory) {
+    return "push";
   }
 
   if (goingBack(history, pathname)) {
-    history.index--
-    return 'back'
-  }
-  else if (goingForward(history, pathname)) {
-    history.index++
-    return 'next'
+    history.index--;
+    return "back";
+  } else if (goingForward(history, pathname)) {
+    history.index++;
+    return "next";
   }
 
-  return 'push'
-}
+  return "push";
+};
 
 const goingBack = (hist: History, path: string): boolean => {
-  const prev = hist.entries[hist.index - 1]
-  return prev && prev.pathname === path
-}
+  const prev = hist.entries[hist.index - 1];
+  return prev && prev.pathname === path;
+};
 
 const goingForward = (hist: History, path: string): boolean => {
-  const next = hist.entries[hist.index + 1]
-  return next && next.pathname === path
-}
+  const next = hist.entries[hist.index + 1];
+  return next && next.pathname === path;
+};
