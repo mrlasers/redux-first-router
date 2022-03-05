@@ -87,7 +87,8 @@
       "./__test-helpers__/setupJest.js"
     ],
     "moduleFileExtensions": [
-      "js"
+      "js",
+      "ts"
     ]
   },
   "config": {

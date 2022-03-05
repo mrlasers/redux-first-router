@@ -1,5 +1,5 @@
 // @flow
-import type { AnyAction, StoreEnhancer } from "redux";
+import { AnyAction, StoreEnhancer } from 'redux'
 import createBrowserHistory from 'rudy-history/createBrowserHistory'
 import createMemoryHistory from 'rudy-history/createMemoryHistory'
 import { addLeadingSlash, stripTrailingSlash } from 'rudy-history/PathUtils'
@@ -7,6 +7,21 @@ import { addLeadingSlash, stripTrailingSlash } from 'rudy-history/PathUtils'
 import historyCreateAction from './action-creators/historyCreateAction'
 import middlewareCreateAction from './action-creators/middlewareCreateAction'
 import middlewareCreateNotFoundAction from './action-creators/middlewareCreateNotFoundAction'
+import {
+    Action,
+    ActionMetaLocation,
+    Dispatch as Next,
+    Document,
+    History,
+    HistoryLocation,
+    Location,
+    LocationState,
+    Options,
+    ReceivedAction,
+    Route,
+    RoutesMap,
+    Store,
+} from './flow-types'
 import { ADD_ROUTES, NOT_FOUND } from './index'
 import attemptCallRouteThunk from './pure-utils/attemptCallRouteThunk'
 import canUseDom from './pure-utils/canUseDom'
@@ -29,22 +44,6 @@ import pathToAction from './pure-utils/pathToAction'
 import createLocationReducer, {
     getInitialState,
 } from './reducer/createLocationReducer'
-
-import type {
-  Dispatch as Next,
-  RoutesMap,
-  Route,
-  Options,
-  Action,
-  ActionMetaLocation,
-  ReceivedAction,
-  Location,
-  LocationState,
-  History,
-  HistoryLocation,
-  Document,
-  Store,
-} from "./flow-types";
 
 const __DEV__ = process.env.NODE_ENV !== "production";
 

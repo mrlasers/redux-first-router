@@ -1,3 +1,5 @@
+import { AnyAction } from 'redux'
+
 // @flow
 import { ADD_ROUTES, NOT_FOUND } from '../index'
 import isServer from '../pure-utils/isServer'
@@ -10,10 +12,9 @@ import type {
   Payload,
   History,
 } from "../flow-types";
-
 export default (initialState: LocationState, routesMap: RoutesMap) => (
   state: LocationState = initialState,
-  action: Action
+  action: AnyAction
 ): LocationState => {
   routesMap = state.routesMap || routesMap;
   const route = routesMap[action.type];
