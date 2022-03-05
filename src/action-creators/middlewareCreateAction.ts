@@ -20,7 +20,7 @@ export default (
   routesMap: RoutesMap,
   prevLocation: Location,
   history: History,
-  notFoundPath: string,
+  notFoundPath?: string,
   serializer?: QuerySerializer
 ): Action => {
   try {
